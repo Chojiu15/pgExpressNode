@@ -1,19 +1,19 @@
 const express = require('express')
 const app = express()
 const PORT = 3002
-const pool = require('./conf/connection')
-require('dotenv').config()
-
+const usersRouter = require('./router/usersRouter')
+const ordersRouter = require('./router/ordersRouter')
+app.use(express.json())
+app.use(express.urlencoded({
+    extended : true
+}))
 
 app.get('/', (req,res) => {
     res.send('Welcome to the PG API')
 })
 
-app.get('/users', (req, res) => {
-    pool.query(`SELECT * FROM users`)
-    .then(data => res.json(data.rows))
-    .catch(e => res.status(500).send(e))
-})
+app.use('/users', usersRouter )
+app.use('/orders', ordersRouter )
 
 
 
